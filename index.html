@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroScan AI | Advanced Brain Tumor Analysis Platform</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Three.js for 3D Brain Viz -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="dark-theme">
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-brain-circuit brain-glow"></i>
+                </div>
+                <div class="logo-text">
+                    <h2>NeuroScan <span>AI</span></h2>
+                    <p>Clinical Intelligence Platform</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item active" data-tab="dashboard">
+                        <i class="fa-solid fa-grid-2x2"></i>
+                        <span>Dashboard</span>
+                    </li>
+                    <li class="nav-item" data-tab="analyze">
+                        <i class="fa-solid fa-magnifying-glass-chart"></i>
+                        <span>Upload & Analyze</span>
+                    </li>
+                    <li class="nav-item" data-tab="viewer3d">
+                        <i class="fa-solid fa-cube"></i>
+                        <span>3D Brain Viewer</span>
+                    </li>
+                    <li class="nav-item" data-tab="growth">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Progression Tracker</span>
+                    </li>
+                    <li class="nav-item" data-tab="chatbot">
+                        <i class="fa-solid fa-comments"></i>
+                        <span>AI Assistant</span>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Voice Assistant Widget inside Sidebar -->
+            <div class="voice-widget">
+                <div class="voice-wave-container" id="voiceWave">
+                    <span class="wave-bar"></span>
+                    <span class="wave-bar"></span>
+                    <span class="wave-bar"></span>
+                    <span class="wave-bar"></span>
+                </div>
+                <button class="voice-mic-btn" id="voiceMicBtn">
+                    <i class="fa-solid fa-microphone"></i>
+                </button>
+                <div class="voice-status">
+                    <p id="voiceStatusText">Voice Assistant Idle</p>
+                    <span id="voiceSubtext">Click to speak / say "Help"</span>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="avatar">
+                        <i class="fa-solid fa-user-doctor"></i>
+                    </div>
+                    <div class="user-info">
+                        <h4>Dr. Sarah Connolly</h4>
+                        <p>Senior Radiologist</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="main-header">
+                <div class="header-search">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" placeholder="Search patients, scans, reports...">
+                </div>
+                <div class="header-actions">
+                    <div class="status-indicator online">
+                        <span class="pulse-dot"></span>
+                        <span>AI Inference: GPU Active</span>
+                    </div>
+                    <div class="notification-badge">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="badge">2</span>
+                    </div>
+                    <button class="btn btn-secondary theme-toggle-btn" id="themeToggle">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Views (Tabs) -->
+            <div class="view-viewport">
+
+                <!-- 1. DASHBOARD VIEW -->
+                <section class="content-view active" id="view-dashboard">
+                    <div class="view-header">
+                        <h1>Clinical Dashboard</h1>
+                        <p>Real-time analytics and patient scan log</p>
+                    </div>
+
+                    <!-- Statistics Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon purple-glow"><i class="fa-solid fa-folder-open"></i></div>
+                            <div class="stat-info">
+                                <h3>1,248</h3>
+                                <p>Total Scans Analyzed</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon red-glow"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                            <div class="stat-info">
+                                <h3>384</h3>
+                                <p>Tumors Detected</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon green-glow"><i class="fa-solid fa-circle-check"></i></div>
+                            <div class="stat-info">
+                                <h3>98.7%</h3>
+                                <p>AI Model Accuracy</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon blue-glow"><i class="fa-solid fa-user-injured"></i></div>
+                            <div class="stat-info">
+                                <h3>86</h3>
+                                <p>Active Monitored Patients</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Layout: Scan History and Recent Activity -->
+                    <div class="dashboard-body">
+                        <!-- Patient Scan Log Table -->
+                        <div class="card patient-log-card">
+                            <div class="card-header">
+                                <h3>Recent Scan Registry</h3>
+                                <div class="card-actions">
+                                    <button class="btn btn-sm btn-outline"><i class="fa-solid fa-filter"></i> Filter</button>
+                                    <button class="btn btn-sm btn-primary" id="btnGoToUpload"><i class="fa-solid fa-plus"></i> New Scan</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="patient-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Patient ID</th>
+                                                <th>Name</th>
+                                                <th>Scan Date</th>
+                                                <th>Tumor Type</th>
+                                                <th>Confidence</th>
+                                                <th>Size (Volume)</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="patientTableBody">
+                                            <!-- Dyn loaded -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. ANALYZE VIEW -->
+                <section class="content-view" id="view-analyze">
+                    <div class="view-header">
+                        <h1>MRI Analysis Workspace</h1>
+                        <p>Upload brain MRI scans for tumor detection, classification, segmentation, and explainable AI overlays.</p>
+                    </div>
+
+                    <div class="workspace-layout">
+                        <!-- Upload & Control Panel -->
+                        <div class="card control-card">
+                            <div class="card-header">
+                                <h3>Scan Ingestion</h3>
+                            </div>
+                            <div class="card-body">
+                                <!-- Drag & Drop area -->
+                                <div class="upload-dropzone" id="dropZone">
+                                    <input type="file" id="mriFileInput" accept="image/*" style="display: none;">
+                                    <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                                    <h4>Drag and drop brain MRI scan</h4>
+                                    <p>or click to browse local files</p>
+                                    <span class="file-types">Supports PNG, JPG, JPEG, or DICOM</span>
+                                </div>
+
+                                <!-- Sample Images Quick Selection -->
+                                <div class="sample-selection">
+                                    <p class="section-label">Or analyze standard clinical samples:</p>
+                                    <div class="sample-grid">
+                                        <div class="sample-item" data-sample="glioma">
+                                            <span class="sample-badge glioma-badge">Glioma</span>
+                                        </div>
+                                        <div class="sample-item" data-sample="meningioma">
+                                            <span class="sample-badge meningioma-badge">Meningioma</span>
+                                        </div>
+                                        <div class="sample-item" data-sample="pituitary">
+                                            <span class="sample-badge pituitary-badge">Pituitary</span>
+                                        </div>
+                                        <div class="sample-item" data-sample="healthy">
+                                            <span class="sample-badge healthy-badge">No Tumor</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Image adjustments controls (only visible when image is loaded) -->
+                                <div class="adjustments-panel disabled" id="adjustmentsPanel">
+                                    <p class="section-label">Visualization Settings</p>
+                                    <div class="control-group">
+                                        <label>Grad-CAM Opacity</label>
+                                        <div class="slider-wrapper">
+                                            <input type="range" id="gradCamOpacity" min="0" max="100" value="50">
+                                            <span id="opacityVal">50%</span>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label>Segmentation Mask Opacity</label>
+                                        <div class="slider-wrapper">
+                                            <input type="range" id="maskOpacity" min="0" max="100" value="60">
+                                            <span id="maskOpacityVal">60%</span>
+                                        </div>
+                                    </div>
+                                    <div class="toggle-group">
+                                        <label class="switch">
+                                            <input type="checkbox" id="showBbox" checked>
+                                            <span class="slider round"></span>
+                                        </label>
+                                        <span>Show Bounding Box</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Image Viewer Panel -->
+                        <div class="card viewer-card">
+                            <div class="card-header">
+                                <h3>Diagnostic Viewer</h3>
+                                <div class="viewer-tabs">
+                                    <button class="viewer-tab active" data-viewer-mode="mri">MRI Scan</button>
+                                    <button class="viewer-tab" data-viewer-mode="xai">Grad-CAM (Explainable AI)</button>
+                                    <button class="viewer-tab" data-viewer-mode="segment">Segmentation</button>
+                                </div>
+                            </div>
+                            <div class="card-body viewer-display-container">
+                                <div class="viewer-display" id="viewerDisplay">
+                                    <div class="empty-viewer-message" id="emptyViewerMessage">
+                                        <i class="fa-solid fa-mri"></i>
+                                        <p>No MRI scan loaded. Drag a file or choose a sample to start analysis.</p>
+                                    </div>
+                                    <div class="image-wrapper hidden" id="imageWrapper">
+                                        <img id="sourceMriImage" src="" alt="MRI Scan Source">
+                                        <canvas id="gradCamCanvas"></canvas>
+                                        <canvas id="segmentationCanvas"></canvas>
+                                        <div id="boundingBoxOverlay" class="bbox-overlay"></div>
+                                    </div>
+                                    <!-- Scanning overlay animation -->
+                                    <div class="scanning-overlay hidden" id="scanningOverlay">
+                                        <div class="scan-bar"></div>
+                                        <p>Running Neural Classifier & Segmentation Models...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Results and Report Panel -->
+                        <div class="card results-card hidden" id="resultsCard">
+                            <div class="card-header">
+                                <h3>Analysis Findings</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="findings-summary">
+                                    <div class="findings-header">
+                                        <span class="findings-badge" id="resultsBadge">Pituitary Tumor</span>
+                                        <span class="confidence-percentage" id="resultsConfidence">98.4% Confidence</span>
+                                    </div>
+                                    <div class="confidence-bar-bg">
+                                        <div class="confidence-bar-fill" id="resultsBarFill" style="width: 98.4%;"></div>
+                                    </div>
+                                </div>
+
+                                <hr class="card-divider">
+
+                                <p class="section-label">Quantitative Measurement</p>
+                                <div class="measurements-grid">
+                                    <div class="measure-box">
+                                        <span class="measure-label">Tumor Width</span>
+                                        <span class="measure-val" id="tumorWidth">3.2 cm</span>
+                                    </div>
+                                    <div class="measure-box">
+                                        <span class="measure-label">Tumor Height</span>
+                                        <span class="measure-val" id="tumorHeight">2.8 cm</span>
+                                    </div>
+                                    <div class="measure-box">
+                                        <span class="measure-label">Cross-section Area</span>
+                                        <span class="measure-val" id="tumorArea">8.96 cm²</span>
+                                    </div>
+                                    <div class="measure-box">
+                                        <span class="measure-label">Estimated Volume</span>
+                                        <span class="measure-val" id="tumorVolume">12.5 cm³</span>
+                                    </div>
+                                </div>
+
+                                <div class="location-details">
+                                    <i class="fa-solid fa-compass"></i>
+                                    <div>
+                                        <span class="detail-label">Tumor Location</span>
+                                        <span class="detail-val" id="tumorLocation">Sellar Region / Left Lateral Hemisphere</span>
+                                    </div>
+                                </div>
+
+                                <hr class="card-divider">
+
+                                <div class="report-box">
+                                    <div class="report-header">
+                                        <h4>AI Medical Report</h4>
+                                        <button class="btn btn-sm btn-secondary" id="btnEditReport"><i class="fa-solid fa-edit"></i> Edit</button>
+                                    </div>
+                                    <textarea class="report-text" id="reportTextArea" readonly>Tumor Type: Pituitary Tumor
+Confidence: 98.4%
+Tumor Size: 3.2 x 2.8 cm (Area: 8.96 cm², Volume: ~12.5 cm³)
+Location: Sellar Region
+Recommendation: Consult neurosurgeon. Perform visual field exam due to optic chiasm proximity. Schedule follow-up scan in 3 months.</textarea>
+                                </div>
+
+                                <div class="results-actions">
+                                    <button class="btn btn-secondary btn-full" id="btnDownloadReportPDF">
+                                        <i class="fa-solid fa-file-pdf"></i> Download PDF Report
+                                    </button>
+                                    <button class="btn btn-primary btn-full" id="btnSaveToRegistry">
+                                        <i class="fa-solid fa-save"></i> Save to Patient Registry
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. 3D VIEWER VIEW -->
+                <section class="content-view" id="view-viewer3d">
+                    <div class="view-header">
+                        <h1>3D Brain Visualization</h1>
+                        <p>Volumetric rendering of the brain structure with localized 3D tumor mapping based on segmented MRI coordinates.</p>
+                    </div>
+
+                    <div class="viewer3d-layout">
+                        <!-- Canvas Card -->
+                        <div class="card viewer3d-canvas-card">
+                            <div class="card-body renderer-container" id="threeJsContainer">
+                                <!-- 3D Canvas will be appended here -->
+                                <div class="render-overlay">
+                                    <div class="control-badge"><i class="fa-solid fa-hand-pointer"></i> Drag to rotate | Scroll to zoom</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3D Settings Card -->
+                        <div class="card viewer3d-control-card">
+                            <div class="card-header">
+                                <h3>3D Mapping Controls</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="control-group">
+                                    <label>Brain Mesh Opacity</label>
+                                    <input type="range" id="threeBrainOpacity" min="10" max="100" value="30">
+                                </div>
+                                <div class="control-group">
+                                    <label>Tumor Pulsate Speed</label>
+                                    <input type="range" id="threeTumorPulsate" min="1" max="10" value="5">
+                                </div>
+                                <div class="toggle-group">
+                                    <label class="switch">
+                                        <input type="checkbox" id="threeShowSlices" checked>
+                                        <span class="slider round"></span>
+                                    </label>
+                                    <span>Render MRI Plane Slices</span>
+                                </div>
+
+                                <hr class="card-divider">
+
+                                <p class="section-label">Identified Coordinates (Centroid)</p>
+                                <div class="coordinates-display">
+                                    <div class="coord"><span class="coord-lbl">X (Lateral)</span><span class="coord-val" id="coordX">0.15</span></div>
+                                    <div class="coord"><span class="coord-lbl">Y (Anterior)</span><span class="coord-val" id="coordY">-0.24</span></div>
+                                    <div class="coord"><span class="coord-lbl">Z (Superior)</span><span class="coord-val" id="coordZ">0.45</span></div>
+                                </div>
+
+                                <div class="info-alert info">
+                                    <i class="fa-solid fa-info-circle"></i>
+                                    <p>The 3D model translates 2D segmentation masks into a spatial grid to aid surgical path planning.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. GROWTH TRACKER VIEW -->
+                <section class="content-view" id="view-growth">
+                    <div class="view-header">
+                        <h1>Tumor Progression Tracker</h1>
+                        <p>Analyze changes in tumor dimension, area, and estimated volume over historical longitudinal scans.</p>
+                    </div>
+
+                    <div class="growth-layout">
+                        <!-- Left Panel: History List -->
+                        <div class="card growth-history-card">
+                            <div class="card-header">
+                                <h3>Patient Scan Timeline</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="patient-picker">
+                                    <label>Select Monitored Patient</label>
+                                    <select id="growthPatientSelect" class="form-select">
+                                        <!-- Loaded dynamically -->
+                                    </select>
+                                </div>
+
+                                <div class="timeline" id="growthTimeline">
+                                    <!-- Timelines dynamic -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Panel: Chart & Analysis -->
+                        <div class="card growth-chart-card">
+                            <div class="card-header">
+                                <h3>Volume Growth Vector</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container" style="position: relative; height:300px; width:100%">
+                                    <canvas id="progressionChart"></canvas>
+                                </div>
+
+                                <hr class="card-divider">
+
+                                <h3>Progression Assessment</h3>
+                                <div class="assessment-container success" id="growthAssessmentContainer">
+                                    <div class="assessment-header">
+                                        <i class="fa-solid fa-circle-down assessment-icon" id="growthAssessmentIcon"></i>
+                                        <h4 id="growthAssessmentTitle">Tumor volume decreased by 18.5%</h4>
+                                    </div>
+                                    <p id="growthAssessmentText">Comparing the scan from June 2026 to the scan from March 2026, the tumor volume has reduced from 15.3 cm³ to 12.5 cm³, indicating a positive response to recent chemotherapy cycles.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. CHATBOT VIEW -->
+                <section class="content-view" id="view-chatbot">
+                    <div class="view-header">
+                        <h1>NeuroScan AI Clinical Assistant</h1>
+                        <p>Discuss diagnostic details, retrieve references on glioma, meningioma, pituitary tumors, or ask general questions.</p>
+                    </div>
+
+                    <div class="chatbot-container">
+                        <div class="card chatbot-card">
+                            <div class="card-body chatbot-messages" id="chatMessages">
+                                <div class="chat-bubble assistant">
+                                    <div class="bubble-avatar"><i class="fa-solid fa-robot"></i></div>
+                                    <div class="bubble-content">
+                                        <p>Hello, I am your NeuroScan AI Clinical Assistant. You can ask me questions about brain tumor classification classes, imaging features, typical treatment modalities, or details about the currently loaded patient scan.</p>
+                                        <span class="bubble-time">Just now</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chatbot-input-area">
+                                <input type="text" id="chatInput" placeholder="Ask a question about tumor types, findings, or treatments...">
+                                <button class="btn btn-primary" id="btnSendChat"><i class="fa-solid fa-paper-plane"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Script Entry Point -->
+    <script src="js/main.js"></script>
+</body>
+</html>
