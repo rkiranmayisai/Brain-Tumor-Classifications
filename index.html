@@ -50,29 +50,11 @@
                         <i class="fa-solid fa-chart-line"></i>
                         <span>Progression Tracker</span>
                     </li>
-                    <li class="nav-item" data-tab="chatbot">
-                        <i class="fa-solid fa-comments"></i>
-                        <span>AI Assistant</span>
-                    </li>
+                    
                 </ul>
             </nav>
 
-            <!-- Voice Assistant Widget inside Sidebar -->
-            <div class="voice-widget">
-                <div class="voice-wave-container" id="voiceWave">
-                    <span class="wave-bar"></span>
-                    <span class="wave-bar"></span>
-                    <span class="wave-bar"></span>
-                    <span class="wave-bar"></span>
-                </div>
-                <button class="voice-mic-btn" id="voiceMicBtn">
-                    <i class="fa-solid fa-microphone"></i>
-                </button>
-                <div class="voice-status">
-                    <p id="voiceStatusText">Voice Assistant Idle</p>
-                    <span id="voiceSubtext">Click to speak / say "Help"</span>
-                </div>
-            </div>
+            
 
             <div class="sidebar-footer">
                 <div class="user-profile">
@@ -472,31 +454,7 @@ Recommendation: Consult neurosurgeon. Perform visual field exam due to optic chi
                     </div>
                 </section>
 
-                <!-- 5. CHATBOT VIEW -->
-                <section class="content-view" id="view-chatbot">
-                    <div class="view-header">
-                        <h1>NeuroScan AI Clinical Assistant</h1>
-                        <p>Discuss diagnostic details, retrieve references on glioma, meningioma, pituitary tumors, or ask general questions.</p>
-                    </div>
-
-                    <div class="chatbot-container">
-                        <div class="card chatbot-card">
-                            <div class="card-body chatbot-messages" id="chatMessages">
-                                <div class="chat-bubble assistant">
-                                    <div class="bubble-avatar"><i class="fa-solid fa-robot"></i></div>
-                                    <div class="bubble-content">
-                                        <p>Hello, I am your NeuroScan AI Clinical Assistant. You can ask me questions about brain tumor classification classes, imaging features, typical treatment modalities, or details about the currently loaded patient scan.</p>
-                                        <span class="bubble-time">Just now</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="chatbot-input-area">
-                                <input type="text" id="chatInput" placeholder="Ask a question about tumor types, findings, or treatments...">
-                                <button class="btn btn-primary" id="btnSendChat"><i class="fa-solid fa-paper-plane"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                
 
             </div>
         </main>
@@ -505,117 +463,6 @@ Recommendation: Consult neurosurgeon. Perform visual field exam due to optic chi
     <!-- Script Entry Point -->
     <script src="main.js"></script>
 
-<!-- NeuroScan AI Voice Greeting -->
-<script>
-(function() {
-    var greetingDone = false;
-    var activeUtterances = []; // Prevent Garbage Collection
-    var textToSpeak = 'Hi Kiran, how are you? I am NeuroScan AI, your clinical intelligence platform for brain tumor detection and analysis. I can help you upload MRI scans, detect tumors using artificial intelligence, visualize results in 3D, track tumor progression over time, and answer your medical questions. Let us get started!';
-    
-    function speakGreeting() {
-        if (greetingDone) return;
-        
-        if (!window.speechSynthesis) {
-            greetingDone = true;
-            return;
-        }
 
-        try {
-            if (window.speechSynthesis.paused) {
-                window.speechSynthesis.resume();
-            }
-            window.speechSynthesis.cancel();
-        } catch(e) {
-            console.error("Speech reset failed:", e);
-        }
-
-        var msg = new SpeechSynthesisUtterance(textToSpeak);
-
-        // Try to find a nice English voice
-        var voices = window.speechSynthesis.getVoices();
-        if (voices && voices.length > 0) {
-            var preferredVoice = voices.find(function(v) {
-                return v.lang.startsWith('en') && (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Zira') || v.name.includes('David'));
-            }) || voices.find(function(v) {
-                return v.lang.startsWith('en');
-            });
-            if (preferredVoice) {
-                msg.voice = preferredVoice;
-            }
-        }
-
-        msg.rate = 0.95;
-        msg.pitch = 1.05;
-        msg.volume = 1;
-
-        msg.onstart = function() {
-            greetingDone = true;
-            sessionStorage.setItem('neuroScanVoiceGreetingPlayed', 'true');
-            cleanupListeners();
-        };
-
-        msg.onend = function() {
-            activeUtterances = [];
-        };
-
-        msg.onerror = function(e) {
-            console.error("Speech synthesis error:", e);
-            if (e.error === 'not-allowed') {
-                greetingDone = false;
-            } else {
-                greetingDone = true;
-                cleanupListeners();
-            }
-            activeUtterances = [];
-        };
-
-        activeUtterances.push(msg);
-        window.activeUtterancesList = activeUtterances;
-
-        window.speechSynthesis.speak(msg);
-    }
-
-    function cleanupListeners() {
-        document.removeEventListener('click', triggerSpeech);
-        document.removeEventListener('keydown', triggerSpeech);
-        document.removeEventListener('touchstart', triggerSpeech);
-    }
-
-    function triggerSpeech() {
-        speakGreeting();
-    }
-
-    function initGreeting() {
-        if (sessionStorage.getItem('neuroScanVoiceGreetingPlayed')) {
-            greetingDone = true;
-            return;
-        }
-
-        // 1. Attempt to speak automatically on load
-        speakGreeting();
-
-        // 2. Register fallback triggers for user activation
-        document.addEventListener('click', triggerSpeech);
-        document.addEventListener('keydown', triggerSpeech);
-        document.addEventListener('touchstart', triggerSpeech);
-
-        // Re-check voices when loaded dynamically
-        if (window.speechSynthesis.onvoiceschanged !== undefined) {
-            window.speechSynthesis.onvoiceschanged = function() {
-                window.speechSynthesis.getVoices();
-                if (!greetingDone) {
-                    speakGreeting();
-                }
-            };
-        }
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initGreeting);
-    } else {
-        initGreeting();
-    }
-})();
-</script>
 </body>
 </html>
