@@ -51,11 +51,11 @@ This project features a fully integrated **AI Clinical Assistant** that greets y
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/your-username/brain-tumor-classification.git
+   git clone https://github.com/rkiranmayisai/Brain-Tumor-Classification.git
    ```
 2. Navigate to the project directory:
    ```bash
-   cd brain-tumor-classification
+   cd Brain-Tumor-Classification
    ```
 3. Open `index.html` directly in your web browser, or serve it using a lightweight local server:
    * **Python**: `python -m http.server 8000`
